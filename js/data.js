@@ -67,7 +67,7 @@ const PortfolioData = {
     {
       title: "Javascript Essentials 1 – CS101",
       issuer: "CISCO Networking Academy",
-      issueDate: "27-Jan-2026",
+      issueDate: "27-JAN-2026",
       badgeIcon: "shield-check",
     },
   ],

@@ -153,23 +153,43 @@
   }
 
   // ---------- CERTIFICATIONS ----------
+    function formatIssueDate(dateStr) {
+    if (!dateStr) return "";
+    const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+    // ISO: 2026-01-27 or 2026-01
+    let m = dateStr.match(/^(\d{4})-(\d{1,2})/);
+    if (m) return `${months[parseInt(m[2], 10) - 1]} ${m[1]}`;
+
+    // DD-Mon-YYYY: 27-Jan-2026
+    m = dateStr.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+    if (m) return `${m[1]} ${m[2].toUpperCase()} ${m[3]}`;
+
+    return dateStr; // unknown format — show as-is
+  }
+
+  // ---------- CERTIFICATIONS ----------
   function renderCertifications() {
     const grid = document.getElementById("certs-grid");
     if (!grid || !D.certifications) return;
     grid.innerHTML = "";
 
     D.certifications.forEach((cert) => {
+      const icon = cert.badgeIcon || "award";
+      const meta = [
+        formatIssueDate(cert.issueDate),
+        cert.credentialId ? `ID ${cert.credentialId}` : "",
+      ].filter(Boolean).join(" · ");
+
       const card = el("div", "hud-card cert-card");
       card.innerHTML = `
         <div class="cert-icon">
-          <i data-lucide="${cert.badgeIcon}" class="w-5 h-5"></i>
+          <i data-lucide="${icon}" class="w-5 h-5"></i>
         </div>
         <div class="flex-1 min-w-0">
           <h4 class="text-sm font-semibold leading-snug mb-1">${cert.title}</h4>
           <div class="text-xs opacity-70 mb-1">${cert.issuer}</div>
-          <div class="text-[11px] font-mono opacity-50 uppercase tracking-wide">
-            ${formatIssueDate(cert.issueDate)} · ID ${cert.credentialId}
-          </div>
+          ${meta ? `<div class="text-[11px] font-mono opacity-50 uppercase tracking-wide">${meta}</div>` : ""}
         </div>
       `;
       grid.appendChild(card);

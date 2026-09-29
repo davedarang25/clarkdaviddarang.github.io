@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clark — In a Galaxy Far Far Away</title>
+  <meta name="description" content="Computer Science student portfolio presented as a Galactic Republic tactical command briefing." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            crimson: { DEFAULT: "#DC2626", bright: "#EF4444" },
+            gold: "#D4AF37",
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Lucide Icons (CDN) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- Fonts: tactical HUD typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body id="top" class="antialiased">
+
+  <!-- =========================================================
+       NAVBAR (mirrors components/navbar.html — inlined so the
+       page runs correctly when opened directly from disk)
+       ========================================================= -->
+  <header class="sticky top-0 z-50 glass-panel border-b" style="border-color: var(--glass-border);">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <span class="w-8 h-8 rounded-sm flex items-center justify-center"
+              style="background: var(--badge-bg); border: 1px solid var(--glass-border-strong);">
+          <i data-lucide="radar" class="w-4 h-4" style="color: var(--accent-crimson-bright);"></i>
+        </span>
+        <span class="font-semibold tracking-tight text-sm md:text-base">
+          <span data-field="fullName">Operative</span>
+          <span class="opacity-40 mx-1">/</span>
+          <span class="font-mono-hud text-xs opacity-60" data-field="codename">—</span>
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7">
+        <a href="#briefing" class="nav-link">Intel Briefing</a>
+        <a href="#control" class="nav-link">Control</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#clearance" class="nav-link">Clearance</a>
+        <a href="#deployments" class="nav-link">Deployments</a>
+        <a href="#comm" class="nav-link">Comm</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <span class="status-pill hidden sm:inline-flex">
+          <span class="pulse-dot"></span>
+          <span data-field="status">ONLINE</span>
+        </span>
+
+        <button data-theme-toggle type="button"
+                class="w-9 h-9 rounded-sm flex items-center justify-center glass-panel hover:opacity-80 transition-opacity"
+                aria-label="Toggle Coruscant Command / Venator Bridge mode">
+          <i data-theme-icon data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+
+        <button id="nav-toggle" type="button"
+                class="md:hidden w-9 h-9 rounded-sm flex items-center justify-center glass-panel"
+                aria-label="Open navigation menu">
+          <i data-lucide="menu" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden glass-panel border-t px-5 py-4 flex flex-col gap-4"
+         style="border-color: var(--glass-border);">
+          <a href="#briefing" class="nav-link">Intel Briefing</a>
+          <a href="#control" class="nav-link">Control</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#clearance" class="nav-link">Clearance</a>
+          <a href="#deployments" class="nav-link">Deployments</a>
+          <a href="#comm" class="nav-link">Comm</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 md:px-8">
+
+    <!-- =========================================================
+     BRIEFING HUD — Battlefield Control Intel
+     ========================================================= -->
+    <section id="briefing" class="py-14 md:py-20 scroll-mt-16">
+      <div class="hud-card relative p-6 md:p-10 overflow-hidden">
+        <!-- Tactical Background Image & Dark Tint Overlay -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+          <img 
+            data-field="background" 
+            src="" 
+            alt="" 
+            class="w-full h-full object-cover opacity-60 contrast-125 brightness-110" 
+          />
+          <!-- Softened gradient layer prevents image crush while maintaining text contrast -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/70"></div>
+        </div>
+
+        <!-- Tactical Corner Brackets -->
+        <div class="corner-bracket corner-bracket--tl z-10"></div>
+        <div class="corner-bracket corner-bracket--tr z-10"></div>
+        <div class="corner-bracket corner-bracket--bl z-10"></div>
+        <div class="corner-bracket corner-bracket--br z-10"></div>
+
+        <!-- Main Content Wrapper (Floats above background) -->
+        <div class="relative z-10">
+          <!-- Top Telemetry Bar -->
+          <div class="flex items-center justify-between mb-8 text-xs font-mono-hud opacity-60">
+            <span>FILE // INTRODUCING THE SUPREME ADMIRAL OF THE REPUBLIC NAVY</span>
+            <span data-clock>--:--:--</span>
+          </div>
+
+            <!-- Operative Intel Dossier -->
+            <div class="flex-1 min-w-0 text-center md:text-left">
+              <!-- Status & Clearance Badges -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
+                <span class="status-pill"><span class="pulse-dot"></span> TACTICAL OVERLAY ACTIVE</span>
+                <span class="tech-badge" data-field="clearanceLevel">CLEARANCE</span>
+                <span class="tech-badge" data-field="designation_region">REGION</span>
+              </div>
+
+              <!-- Name & Rank -->
+              <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-1">
+                <span data-field="fullName">Operative Name</span>
+              </h1>
+              <p class="text-sm font-mono-hud opacity-75 mb-2 text-primary">
+                Rank: <span data-field="rank">—</span>
+              </p>
+              <p class="text-xs font-mono-hud opacity-60 italic mb-6">
+                "<span data-field="motto">—</span>"
+              </p>
+
+              <!-- Tactical Telemetry Badges -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+                <span class="tech-badge">Base: <span data-field="commandPost">—</span></span>
+                <span class="tech-badge">Vessel: <span data-field="ship_class">—</span></span>
+                <span class="tech-badge">Deployment: <span data-field="gradYear">—</span></span>
+              </div>
+
+              <!-- Operative Bio -->
+              <p class="text-sm md:text-[15px] leading-relaxed opacity-80 max-w-2xl mx-auto md:mx-0 mb-8" data-field="bio">
+                Bio loading…
+              </p>
+
+              <!-- Action Controls -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                <a href="#projects" class="btn-primary">
+                  <i data-lucide="target" class="w-4 h-4"></i> View Mission Log
+                </a>
+                <a href="#comm" class="btn-secondary">
+                  <i data-lucide="radio" class="w-4 h-4"></i> Establish Comm
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         HERO HUD — Battlefield Control Intel
+         ========================================================= -->
+    <section id="control" class="py-14 md:py-20 scroll-mt-16">
+      <div class="hud-card relative p-6 md:p-10">
+        <div class="corner-bracket corner-bracket--tl"></div>
+        <div class="corner-bracket corner-bracket--tr"></div>
+        <div class="corner-bracket corner-bracket--bl"></div>
+        <div class="corner-bracket corner-bracket--br"></div>
+
+        <div class="flex items-center justify-between mb-8 text-xs font-mono-hud opacity-60">
+          <span>FILE // OPERATIVE-DOSSIER-001</span>
+          <span data-clock>--:--:--</span>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+          <div class="avatar-frame shrink-0 mx-auto md:mx-0">
+            <img data-field="profileImage" src="./assets/images/profile-clark-darang.jpg" alt="Operative portrait" />
+            <div class="avatar-fallback hidden">
+              <i data-lucide="user-round" class="w-10 h-10"></i>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0 text-center md:text-left">
+            <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
+              <span class="status-pill"><span class="pulse-dot"></span> TACTICAL OVERLAY ACTIVE</span>
+              <span class="tech-badge" data-field="clearanceLevel">CLEARANCE</span>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-2">
+              <span data-field="fullName">Operative Name</span>
+            </h1>
+            <p class="text-sm font-mono-hud opacity-60 mb-6">
+              Codename: <span data-field="codename">—</span>
+            </p>
+
+            <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+              <span class="tech-badge">Cycle Count: <span data-field="age">—</span></span>
+              <span class="tech-badge" data-field="college">Sector Base</span>
+              <span class="tech-badge"><span data-field="degreeProgram">Program</span></span>
+              <span class="tech-badge">Deployment: <span data-field="gradYear">—</span></span>
+            </div>
+
+            <p class="text-sm md:text-[15px] leading-relaxed opacity-80 max-w-2xl mx-auto md:mx-0 mb-8" data-field="bio">
+              Bio loading…
+            </p>
+
+            <div class="flex flex-wrap justify-center md:justify-start gap-3">
+              <a href="#projects" class="btn-primary">
+                <i data-lucide="target" class="w-4 h-4"></i> View Mission Log
+              </a>
+              <a href="#comm" class="btn-secondary">
+                <i data-lucide="radio" class="w-4 h-4"></i> Establish Comm
+              </a>
+            </div>
+
+            <div class="hero-actions flex flex-wrap items-center gap-3">
+
+              <!-- Social Icons (Placed directly to the right) -->
+              <div class="icon-button-group flex items-center gap-2">
+                <!-- GitHub Button -->
+                <a href="https://github.com/davedarang25" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="GitHub">
+                  <i class="fab fa-github"></i>
+                </a>
+
+                <!-- LinkedIn Button -->
+                <a href="https://www.linkedin.com/in/clark-david-darang/" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="LinkedIn">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+
+                <!-- Email (Standard/Small Size) -->
+                <a href="mailto:your.email@example.com" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="Email">
+                  <i class="far fa-envelope"></i>
+                </a>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         PROJECTS MISSION LOG
+         ========================================================= -->
+    <section id="projects" class="py-10 md:py-14 scroll-mt-16">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div class="text-xs font-mono-hud tracking-wide opacity-50 mb-1">SECTION 02</div>
+          <h2 class="text-2xl font-bold tracking-tight">Mission Log</h2>
+        </div>
+        <i data-lucide="folder-git-2" class="w-5 h-5 opacity-40 hidden sm:block"></i>
+      </div>
+      <div id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+    </section>
+
+    <!-- =========================================================
+         CLEARANCE & CERTIFICATIONS + SKILLS
+         ========================================================= -->
+    <section id="clearance" class="py-10 md:py-14 scroll-mt-16">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div class="text-xs font-mono-hud tracking-wide opacity-50 mb-1">SECTION 03</div>
+          <h2 class="text-2xl font-bold tracking-tight">Clearance &amp; Certifications</h2>
+        </div>
+        <i data-lucide="badge-check" class="w-5 h-5 opacity-40 hidden sm:block"></i>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        <div id="certs-grid" class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+        <div class="lg:col-span-2 hud-card">
+          <div class="px-1 pt-1">
+            <div class="px-4 pt-4 pb-1 text-xs font-mono-hud tracking-wide opacity-50">SKILL MATRIX</div>
+          </div>
+          <div id="skills-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         DEPLOYMENT EXPERIENCE TIMELINE
+         ========================================================= -->
+    <section id="deployments" class="py-10 md:py-14 scroll-mt-16">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div class="text-xs font-mono-hud tracking-wide opacity-50 mb-1">SECTION 04</div>
+          <h2 class="text-2xl font-bold tracking-tight">Deployment Log</h2>
+        </div>
+        <i data-lucide="route" class="w-5 h-5 opacity-40 hidden sm:block"></i>
+      </div>
+      <ul id="timeline-list" class="flex flex-col"></ul>
+    </section>
+
+    <!-- =========================================================
+         COMM CHANNEL — Transmission Terminal
+         ========================================================= -->
+    <section id="comm" class="py-10 md:py-16 scroll-mt-16">
+      <div class="hud-card relative p-6 md:p-10 max-w-2xl mx-auto">
+        <div class="corner-bracket corner-bracket--tl"></div>
+        <div class="corner-bracket corner-bracket--br"></div>
+
+        <div class="text-xs font-mono-hud tracking-wide opacity-50 mb-1">SECTION 05</div>
+        <h2 class="text-2xl font-bold tracking-tight mb-2">Transmission Terminal</h2>
+        <p class="text-sm opacity-70 mb-6">
+          Open a comm channel — send a message and I'll respond as soon as I'm out of the field.
+        </p>
+
+        <form id="comm-form" class="flex flex-col gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <input class="hud-input" type="text" name="name" placeholder="Your callsign (name)" required />
+            <input class="hud-input" type="email" name="email" placeholder="Return frequency (email)" required />
+          </div>
+          <textarea class="hud-input" name="message" rows="4" placeholder="Transmission content…" required></textarea>
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <button type="submit" class="btn-primary">
+              <i data-lucide="send" class="w-4 h-4"></i> Send Transmission
+            </button>
+            <div class="flex items-center gap-4">
+              <a data-social="github" href="https://github.com/davedarang25" target="_blank" rel="noopener" class="link-chip" aria-label="GitHub">
+                <i data-lucide="github" class="w-4 h-4"></i>
+              </a>
+              <a data-social="linkedin" href="#" target="_blank" rel="noopener" class="link-chip" aria-label="LinkedIn">
+                <i data-lucide="linkedin" class="w-4 h-4"></i>
+              </a>
+              <a data-social="email" href="#" class="link-chip" aria-label="Email">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+        </form>
+        <p id="comm-status" class="hidden mt-4 text-sm font-mono-hud" style="color: var(--accent-crimson-bright);"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER (mirrors components/footer.html — inlined so the
+       page runs correctly when opened directly from disk)
+       ========================================================= -->
+  <footer class="border-t mt-10" style="border-color: var(--glass-border);">
+    <div class="max-w-6xl mx-auto px-5 md:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+
+      <div class="flex items-center gap-2 text-xs opacity-60 font-mono-hud">
+        <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+        <span>GALACTIC REPUBLIC ARCHIVES &copy; <span id="boot-year">2026</span></span>
+        <span class="opacity-40">/</span>
+        <span data-field="fullName">Operative</span>
+      </div>
+
+      <div class="flex items-center gap-5">
+        <a data-social="github" href="https://github.com/davedarang25" target="_blank" rel="noopener" class="link-chip" aria-label="GitHub">
+          <i data-lucide="github" class="w-4 h-4"></i>
+        </a>
+        <a data-social="linkedin" href="#" target="_blank" rel="noopener" class="link-chip" aria-label="LinkedIn">
+          <i data-lucide="linkedin" class="w-4 h-4"></i>
+        </a>
+        <a data-social="email" href="#" class="link-chip" aria-label="Email">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+        </a>
+
+        <div class="icon-button-group" class="flex items-center gap-5">
+          <!-- GitHub Button -->
+          <a href="https://github.com/davedarang25" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+
+          <!-- LinkedIn Button -->
+          <a href="https://www.linkedin.com/in/clark-david-darang/" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+
+          <!-- Email / Contact Button -->
+          <a href="mailto:your.email@example.com" target="_blank" rel="noopener noreferrer" class="icon-btn icon-btn-sm" aria-label="Email">
+            <i class="far fa-envelope"></i>
+          </a>
+        </div>
+
+        <span class="text-[11px] font-mono-hud opacity-40" data-clock>--:--:--</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Data layer, theme engine, rendering engine -->
+  <script src="js/data.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

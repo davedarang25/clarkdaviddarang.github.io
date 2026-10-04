@@ -69,6 +69,18 @@ const PortfolioData = {
       issuer: "CISCO Networking Academy",
       issueDate: "27-JAN-2026",
       badgeIcon: "shield-check",
+      badgeImage: "assets/images/badges/javascript-essentials-1.png",
+      pdfLink: "assets/images/badges/JS-essentials-cert.pdf",
+      links: "https://www.credly.com/badges/25d82ca1-1c58-4975-90b3-64229dd9310d/public_url",
+    },
+    {
+      title: "Python Essentials 1",
+      issuer: "CISCO Networking Academy",
+      issueDate: "4-OCT-2026",
+      badgeIcon: "shield-check",
+      badgeImage: "assets/images/badges/python-essentials-1.1.png",
+      pdfLink: "assets/images/badges/PythonEssentials1Update20261004-20-cj7iu.pdf",
+      links: "https://www.credly.com/badges/6145defa-9d72-460f-9144-0d311644304a/public_url",
     },
   ],
 

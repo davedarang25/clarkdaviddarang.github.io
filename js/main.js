@@ -168,7 +168,7 @@
     return dateStr; // unknown format — show as-is
   }
 
-  // ---------- CERTIFICATIONS ----------
+    // ---------- CERTIFICATIONS ----------
   function renderCertifications() {
     const grid = document.getElementById("certs-grid");
     if (!grid || !D.certifications) return;
@@ -181,15 +181,46 @@
         cert.credentialId ? `ID ${cert.credentialId}` : "",
       ].filter(Boolean).join(" · ");
 
+      // Badge photo: opens Credly if available, otherwise the full image.
+      // Falls back to the Lucide icon if the image is missing.
+      const badgeTarget = cert.links || cert.badgeImage;
+      const badgeHtml = cert.badgeImage
+        ? `<a href="${badgeTarget}" target="_blank" rel="noopener"
+              class="shrink-0 block w-16 h-16" aria-label="View ${cert.title} badge">
+             <img src="${cert.badgeImage}" alt="${cert.title} badge" loading="lazy"
+                  class="w-16 h-16 object-contain transition-transform hover:scale-105"
+                  onerror="this.parentElement.classList.add('hidden');
+                           this.parentElement.nextElementSibling.classList.remove('hidden');" />
+           </a>
+           <div class="cert-icon hidden"><i data-lucide="${icon}" class="w-5 h-5"></i></div>`
+        : `<div class="cert-icon"><i data-lucide="${icon}" class="w-5 h-5"></i></div>`;
+
+      // Action buttons: Credly verification + certificate PDF
+      const actions = [
+        cert.links
+          ? `<a href="${cert.links}" target="_blank" rel="noopener" class="link-chip">
+               <i data-lucide="badge-check" class="w-3.5 h-3.5"></i> Verify on Credly
+             </a>`
+          : "",
+        cert.pdfLink
+          ? `<a href="${cert.pdfLink}" target="_blank" rel="noopener" class="link-chip">
+               <i data-lucide="file-text" class="w-3.5 h-3.5"></i> View Certificate
+             </a>`
+          : "",
+      ].filter(Boolean).join("");
+
+      const actionsHtml = actions
+        ? `<div class="flex flex-wrap items-center gap-3 mt-3">${actions}</div>`
+        : "";
+
       const card = el("div", "hud-card cert-card");
       card.innerHTML = `
-        <div class="cert-icon">
-          <i data-lucide="${icon}" class="w-5 h-5"></i>
-        </div>
+        ${badgeHtml}
         <div class="flex-1 min-w-0">
           <h4 class="text-sm font-semibold leading-snug mb-1">${cert.title}</h4>
           <div class="text-xs opacity-70 mb-1">${cert.issuer}</div>
           ${meta ? `<div class="text-[11px] font-mono opacity-50 uppercase tracking-wide">${meta}</div>` : ""}
+          ${actionsHtml}
         </div>
       `;
       grid.appendChild(card);
